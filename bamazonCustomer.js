@@ -43,6 +43,7 @@ function buyItem() {
                     itemChosen = results[i];
                 }
             }
+            //find out quantity of item and check if item is available.
         })
     })
 }

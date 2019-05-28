@@ -5,11 +5,11 @@ const connection = require('./constructors/keys.js');
 //connection to mysql database.
 connection.connect(function (err) {
     if (err) throw err;
-    readProducts();
+    searchProducts();
 });
 
 function buyItem() {
-    connection.query("SELECT * FROM products WHERE stock_quantity > 0", function (err, results) {
+    connection.query("SELECT * FROM product WHERE stock_quantity > 0", function (err, results) {
         if (err) throw err;
         inquirer.prompt([{
                 name: "choice",
@@ -49,7 +49,7 @@ function buyItem() {
                 let newQuantity = parseInt(itemChosen.stock_quantity) - parseInt(answer.quantity);
                 let totalPrice = parseFloat(itemChosen.price) * answer.quantity;
                 connection.query(
-                    "UPDATE products SET ? WHERE ?",
+                    "UPDATE product SET ? WHERE ?",
                     [{
                             stock_quantity: newQuantity,
                             product_sales: (parseFloat(itemChosen.product_sales) + parseFloat(totalPrice)).toFixed(2)
@@ -91,7 +91,7 @@ function continueShopping() {
 }
 
 function searchProducts() {
-    connection.query("SELECT * FROM products WHERE stock_quantity > 0", function(err, res) {
+    connection.query("SELECT * FROM product WHERE stock_quantity > 0", function(err, res) {
         if(err) throw err;
         console.log("+----+------------------------------------------+------------------+----------+");
 		console.log("|  # | NAME                                     | DEPARTMENT       | PRICE    |");

@@ -105,7 +105,7 @@ function searchProducts() {
             while(item_id.length < 2) {
                 item_id = " " + item_id;
             }
-            while(product_name.length < 30) {
+            while(product_name.length < 50) {
                 product_name = product_name + " ";
             }
             while(department_name_name.length < 20) {

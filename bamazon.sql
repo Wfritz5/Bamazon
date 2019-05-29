@@ -14,3 +14,10 @@ CREATE TABLE product (
     product_sales INTEGER(10) NULL,
   PRIMARY KEY (item_id)
 );
+
+CREATE TABLE departments (
+department_id INT NOT NULL AUTO_INCREMENT,
+department_name VARCHAR(100) NULL,
+overhead_costs INTEGER(10) NULL,
+PRIMARY KEY (department_id)
+);

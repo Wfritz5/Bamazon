@@ -36,41 +36,9 @@ function viewProductSales() {
 			+ "GROUP BY departments.department_name ORDER BY total_sales DESC";
 	connection.query(q, function(err, res) {
 		if (err) throw err;
-		console.log("+----+-----------------------------+----------------+---------------+--------------+");
-		console.log("| ID | DEPARTMENT NAME             | OVERHEAD COSTS | PRODUCT SALES | TOTAL PROFIT |");
-		console.log("+----+-----------------------------+----------------+---------------+--------------+");
-		// Display items
-		for (let i = 0; i < res.length; i++) {
-			let department_id = res[i].department_id.toString();
-			let department_name = res[i].department_name;
-			let overhead_costs = res[i].overhead_costs.toString();
-			let product_sales;
-			if(res[i].total_sales === null) {
-				product_sales = "0";
-			}
-			else {
-				product_sales = parseFloat(res[i].total_sales).toFixed(2).toString();
-			}
-			let total_profit = (parseFloat(product_sales) - parseFloat(overhead_costs)).toFixed(2).toString();
-			// Update strings
-			while(department_id.length < 2) {
-				department_id = " " + department_id;
-			}
-			while(department_name.length < 27) {
-				department_name = department_name + " ";
-			}
-			while(overhead_costs.length < 14) {
-				overhead_costs = " " + overhead_costs;
-			}
-			while(product_sales.length < 13) {
-				product_sales = " " + product_sales;
-			}
-			while(total_profit.length < 12) {
-				total_profit = " " + total_profit;
-			}			
-			console.log("| " + department_id + " | " + department_name + " | " + overhead_costs + " | " + product_sales + " | " + total_profit + " |");
-		}
-		console.log("+----+-----------------------------+----------------+---------------+--------------+\n");
+        console.table(res);
+
+
 		options();
 	});
 }
@@ -103,7 +71,7 @@ function createDepartment() {
 					console.log(error);
 					throw error;
 				}
-				console.log("You have added a " + answer.department_name + " department with an overhead cost of $" + answer.overhead_costs + ".\n");
+				console.log(`You have added a ${answer.department_name} department with an overhead cost of $${answer.overhead_costs}.\n`);
 				options();
 			}
 		);

@@ -1,7 +1,8 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./constructors/keys.js');
-
+require('console.table');
+//amount of the specific item the custommer would like to order needs to be fixed.
 //connection to mysql database.
 connection.connect(function (err) {
     if (err) throw err;
@@ -93,30 +94,8 @@ function continueShopping() {
 function searchProducts() {
     connection.query("SELECT * FROM product WHERE stock_quantity > 0", function(err, res) {
         if(err) throw err;
-        console.log("+----+------------------------------------------+------------------+----------+");
-		console.log("|  # | NAME                                     | DEPARTMENT       | PRICE    |");
-        console.log("+----+------------------------------------------+------------------+----------+");
-        
-        for(let i = 0; i < res.length; i++) {
-            let item_id = res[i].item_id.toString();
-            let product_name = res[i].product_name;
-            let department_name = res[i].department_name;
-            let price = "$" + res[i].price;
-            while(item_id.length < 2) {
-                item_id = " " + item_id;
-            }
-            while(product_name.length < 40) {
-                product_name = product_name + " ";
-            }
-            while(department_name.length < 20) {
-                department_name = department_name + " ";
-            }
-            while(price.length < 10) {
-                price = " " + price;
-            }
-            console.log("| " + item_id + " | " + product_name + " | " + department_name + " | " + price + " | ");
-        }
-        console.log("+----+------------------------------------------+------------------+----------+\n")
+
+        console.table(res);
     });
     buyItem();
 }

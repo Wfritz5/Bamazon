@@ -2,6 +2,8 @@ const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./constructors/keys.js');
 
+//adding more inventory needs to be looked at.
+
 options();
 //display options menu
 
@@ -37,35 +39,10 @@ function products(low) {
     }
     connection.query(q, function (err, res) {
         if (err) throw err;
-        console.log("+----+---------------------------------------------------+------------------+----------+-----+");
-        console.log("|  # | NAME                                     | DEPARTMENT       | PRICE    | QTY |");
-        console.log("+----+-----------------------------------=---------------+------------------+----------+-----+");
-        //displaying all items
-        for (let i = 0; i < res.length; i++) {
-            let item_id = res[i].item_id.toString();
-            let product_name = res[i].product_name;
-            let department_name = res[i].department_name;
-            let price = "$" + res[i].price;
-            let stock_quantity = res[i].stock_quantity.toString();
+        
+                //displaying all items
+        console.table(res);
 
-            while (item_id.length < 2) {
-                item_id = " " + item_id;
-            }
-            while (product_name.length < 40) {
-                product_name = product_name + " ";
-            }
-            while (department_name.length < 20) {
-                department_name = department_name + " ";
-            }
-            while (price.length < 10) {
-                price = " " + price;
-            }
-            while (stock_quantity.length < 5) {
-                stock_quantity = " " + stock_quantity;
-            }
-            console.log("| " + item_id + " | " + product_name + " | " + department_name + " | " + price + " | " + stock_quantity + " |");
-        }
-        console.log("+----+---------------------------------------------------+------------------+----------+-----+\n");
         options();
     });
 }
@@ -100,7 +77,7 @@ let addToInventory = () => {
             }
             let updateStockCount = parseInt(itemChosen.stock_quantity) + parseInt(answer.quantity);
             connection.query(
-                "UPDATE prodct SET ? WHERE ?",
+                "UPDATE product SET ? WHERE ?",
                 [{
                         stock_quantity: updateStockCount
                     },
@@ -110,7 +87,7 @@ let addToInventory = () => {
                 ],
                 function (error) {
                     if (error) throw error;
-                    console.log("You have successfully added " + answer.quantity + "units to your inventory. You now have" + updateStockCount + ".");
+                    console.log(`You have successfully added ${answer.quantity} units to your inventory. You now have a total of ${updateStockCount}.`);
                     options();
                 }
             );

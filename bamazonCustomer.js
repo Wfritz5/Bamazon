@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./constructors/keys.js');
 require('console.table');
-//amount of the specific item the custommer would like to order needs to be fixed.
 //connection to mysql database.
 connection.connect(function (err) {
     if (err) throw err;
@@ -44,7 +43,6 @@ function buyItem() {
                 }
             }
             //find out quantity of item and check if item is available..
-
             if (itemChosen.stock_quantity >= parseInt(answer.quantity)) {
                 //reduce stock 
                 let newQuantity = parseInt(itemChosen.stock_quantity) - parseInt(answer.quantity);
@@ -61,12 +59,13 @@ function buyItem() {
                     ],
                     function (error) {
                         if (error) throw error;
-                        console.log("Thank you for shopping with us! Your total today is $" + totalPrice + ".\n");
+                        console.log(`Thank you for shopping with us! Your total today is $ ${totalPrice}.\n`);
                         continueShopping();
                     }
                 )
             } else {
-                console.log("Low inventory. Sorry! We only have " + itemChosen.stock_quantity + "in stock.\n");
+                console.log(`Low inventory. Sorry! We only have ${itemChosen.stock_quantity} in stock.\n`);
+                connection.end();
             }
         });
     });
@@ -74,26 +73,23 @@ function buyItem() {
 
 function continueShopping() {
     inquirer
-    .prompt([
-        {
-            name : "again",
-            type : "confirm",
-            message : "Would you like to continue shopping?\n"
-        }
-    ]).then(function(answer) {
-        if(answer.again) {
-            searchProducts();
-        }
-        else {
-            console.log("OK, see you next time.\n");
-            connection.end()
-        }
-    });
+        .prompt([{
+            name: "again",
+            type: "confirm",
+            message: "Would you like to continue shopping?\n"
+        }]).then(function (answer) {
+            if (answer.again) {
+                searchProducts();
+            } else {
+                console.log("OK, see you next time.\n");
+                connection.end()
+            }
+        });
 }
 
 function searchProducts() {
-    connection.query("SELECT * FROM product WHERE stock_quantity > 0", function(err, res) {
-        if(err) throw err;
+    connection.query("SELECT * FROM product WHERE stock_quantity > 0", function (err, res) {
+        if (err) throw err;
 
         console.table(res);
     });
